@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Dealer Dashboard | Drakkar Boats</title>
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="../../wp-content/themes/drakkarboats/css/style.css@ver=2021090201.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <style>
+            .dealer-dashboard-container {
+                padding: 40px 20px;
+            }
+            .dealer-dashboard-header {
+                text-align: center;
+                margin-bottom: 40px;
+            }
+            .dealer-dashboard-header h1 {
+                color: #255189;
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+            }
+            .dealer-dashboard-header p {
+                color: #666;
+                font-size: 1.1rem;
+            }
+            .dealer-options {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 30px;
+                margin-bottom: 50px;
+            }
+            .dealer-option-card {
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                padding: 30px;
+                width: 100%;
+                max-width: 350px;
+                text-align: center;
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
+            .dealer-option-card:hover {
+                transform: translateY(-10px);
+                box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            }
+            .dealer-option-icon {
+                font-size: 3rem;
+                color: #255189;
+                margin-bottom: 20px;
+            }
+            .dealer-option-card h2 {
+                color: #255189;
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+            }
+            .dealer-option-card p {
+                color: #666;
+                margin-bottom: 20px;
+                min-height: 60px;
+            }
+            .dealer-option-btn {
+                background-color: #255189;
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 4px;
+                font-weight: 600;
+                text-decoration: none;
+                display: inline-block;
+                transition: background-color 0.3s;
+            }
+            .dealer-option-btn:hover {
+                background-color: #1a3c6a;
+                color: white;
+            }
+            .dealer-logout {
+                text-align: center;
+                margin-top: 30px;
+            }
+            .dealer-logout a {
+                color: #255189;
+                text-decoration: none;
+                font-weight: 600;
+            }
+            .dealer-logout a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <section id="dealer-dashboard">
+                <div class="dealer-dashboard-container">
+                    <div class="dealer-dashboard-header">
+                        <h1>Dealer Dashboard</h1>
+                        <p>Welcome to your Drakkar Boats dealer portal. Select an option below to get started.</p>
+                    </div>
+                    <div class="dealer-options">
+                        <div class="dealer-option-card">
+                            <div class="dealer-option-icon">
+                                <i class="fas fa-ship"></i>
+                            </div>
+                            <h2>New Boat</h2>
+                            <p>Register new boat orders and customize options for your customers.</p>
+                            <a href="new-boat.html" class="dealer-option-btn">Get Started</a>
+                        </div>
+                        <div class="dealer-option-card">
+                            <div class="dealer-option-icon">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <h2>Track Orders</h2>
+                            <p>Track and manage your current boat orders and their production status.</p>
+                            <a href="track-orders.html" class="dealer-option-btn">View Orders</a>
+                        </div>
+                        <div class="dealer-option-card">
+                            <div class="dealer-option-icon">
+                                <i class="fas fa-life-ring"></i>
+                            </div>
+                            <h2>After-Sales Service</h2>
+                            <p>Submit and track after-sales service requests and warranty claims.</p>
+                            <a href="after-sales.html" class="dealer-option-btn">Submit Request</a>
+                        </div>
+                    </div>
+                    <div class="dealer-logout">
+                        <a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <script>
+        // Logout só ao clicar no botão
+        const logoutBtn = document.querySelector('.dealer-logout a');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function(ev) {
+                ev.preventDefault();
+                window.location.href = 'index.html';
+            });
+        }
+        </script>
+        <script>
+        // Tradução Dashboard Dealer
+        (function() {
+            const translations = {
+                pt: {
+                    'Dealer Dashboard': 'Painel do Dealer',
+                    'Welcome to your Drakkar Boats dealer portal. Select an option below to get started.': 'Bem-vindo ao portal do dealer Drakkar Boats. Selecione uma opção abaixo para começar.',
+                    'New Boat': 'Novo Barco',
+                    'Register new boat orders and customize options for your customers.': 'Cadastre novos pedidos de barcos e personalize opções para seus clientes.',
+                    'Get Started': 'Começar',
+                    'Track Orders': 'Acompanhar Pedidos',
+                    'Track and manage your current boat orders and their production status.': 'Acompanhe e gerencie seus pedidos de barcos e o status de produção.',
+                    'View Orders': 'Ver Pedidos',
+                    'After-Sales Service': 'Pós-venda',
+                    'Submit and track after-sales service requests and warranty claims.': 'Envie e acompanhe solicitações de pós-venda e garantias.',
+                    'Submit Request': 'Enviar Solicitação',
+                    'Logout': 'Sair'
+                },
+                en: {
+                    'Dealer Dashboard': 'Dealer Dashboard',
+                    'Welcome to your Drakkar Boats dealer portal. Select an option below to get started.': 'Welcome to your Drakkar Boats dealer portal. Select an option below to get started.',
+                    'New Boat': 'New Boat',
+                    'Register new boat orders and customize options for your customers.': 'Register new boat orders and customize options for your customers.',
+                    'Get Started': 'Get Started',
+                    'Track Orders': 'Track Orders',
+                    'Track and manage your current boat orders and their production status.': 'Track and manage your current boat orders and their production status.',
+                    'View Orders': 'View Orders',
+                    'After-Sales Service': 'After-Sales Service',
+                    'Submit and track after-sales service requests and warranty claims.': 'Submit and track after-sales service requests and warranty claims.',
+                    'Submit Request': 'Submit Request',
+                    'Logout': 'Logout'
+                },
+                es: {
+                    'Dealer Dashboard': 'Panel del Distribuidor',
+                    'Welcome to your Drakkar Boats dealer portal. Select an option below to get started.': 'Bienvenido al portal del distribuidor Drakkar Boats. Seleccione una opción para comenzar.',
+                    'New Boat': 'Nuevo Barco',
+                    'Register new boat orders and customize options for your customers.': 'Registre nuevos pedidos de barcos y personalice opciones para sus clientes.',
+                    'Get Started': 'Comenzar',
+                    'Track Orders': 'Rastrear Pedidos',
+                    'Track and manage your current boat orders and their production status.': 'Rastree y gestione sus pedidos de barcos y su estado de producción.',
+                    'View Orders': 'Ver Pedidos',
+                    'After-Sales Service': 'Servicio Postventa',
+                    'Submit and track after-sales service requests and warranty claims.': 'Envíe y rastree solicitudes de servicio postventa y garantías.',
+                    'Submit Request': 'Enviar Solicitud',
+                    'Logout': 'Cerrar sesión'
+                }
+            };
+            const lang = localStorage.getItem('selectedLang') || 'pt';
+            function translateText(selector, original) {
+                const el = document.querySelector(selector);
+                if (el && translations[lang][original]) el.textContent = translations[lang][original];
+            }
+            // Header
+            translateText('.dealer-dashboard-header h1', 'Dealer Dashboard');
+            translateText('.dealer-dashboard-header p', 'Welcome to your Drakkar Boats dealer portal. Select an option below to get started.');
+            // Cards
+            const cardTitles = document.querySelectorAll('.dealer-option-card h2');
+            const cardDescs = document.querySelectorAll('.dealer-option-card p');
+            const cardBtns = document.querySelectorAll('.dealer-option-btn');
+            if(cardTitles[0]) translateText('.dealer-option-card:nth-child(1) h2', 'New Boat');
+            if(cardDescs[0]) translateText('.dealer-option-card:nth-child(1) p', 'Register new boat orders and customize options for your customers.');
+            if(cardBtns[0]) cardBtns[0].textContent = translations[lang]['Get Started'];
+            if(cardTitles[1]) translateText('.dealer-option-card:nth-child(2) h2', 'Track Orders');
+            if(cardDescs[1]) translateText('.dealer-option-card:nth-child(2) p', 'Track and manage your current boat orders and their production status.');
+            if(cardBtns[1]) cardBtns[1].textContent = translations[lang]['View Orders'];
+            if(cardTitles[2]) translateText('.dealer-option-card:nth-child(3) h2', 'After-Sales Service');
+            if(cardDescs[2]) translateText('.dealer-option-card:nth-child(3) p', 'Submit and track after-sales service requests and warranty claims.');
+            if(cardBtns[2]) cardBtns[2].textContent = translations[lang]['Submit Request'];
+            // Logout
+            const logout = document.querySelector('.dealer-logout a');
+            if(logout) logout.innerHTML = `<i class="fas fa-sign-out-alt"></i> ${translations[lang]['Logout']}`;
+        })();
+        </script>
+
+<!-- Script de sincronização entre painéis -->
+<script src="../js/sync-data.js"></script>
+
+<script>
+// Listener para sincronização de dados
+window.addEventListener('storage', function(e) {
+    // Verifica se a chave alterada é uma das que nos interessa
+    if (e.key && (e.key.endsWith('_sync') || [
+        'enginePackages', 'hullColors', 'additionalOptions', 'boatModels', 'dealers', 'orders', 'serviceRequests'
+    ].includes(e.key))) {
+        console.log(`Dados atualizados externamente: ${e.key}`);
+        // Aqui poderia atualizar qualquer dado exibido no dashboard
+    }
+});
+</script>
+</body>
+</html>

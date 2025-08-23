@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: portalatt
+    env: node
+    buildCommand: bash scripts/render-build.sh
+    startCommand: npm start
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NPM_CONFIG_PACKAGE_LOCK
+        value: "true"
+      - key: SKIP_INSTALL_DEPS
+        value: "false"
+      - key: NEXT_PUBLIC_UPLOADCARE_PUBLIC_KEY
+        value: 283e132f34f9b2d44934
+      # Add your Supabase credentials in Render dashboard
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false  # Set this in Render dashboard
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false  # Set this in Render dashboard
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false  # Set this in Render dashboard

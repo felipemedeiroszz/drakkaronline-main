@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Administrator | Drakkar Boats</title>
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" integrity="sha512-b2QcS5SsA8tZodcDtGRELiGv5SaKSk1vDHDaQRda0htPYWZ6046lr3kJ5bAAQdpV2mmA/4v0wQF9MyU6/pDIAg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<style>body{padding:40px} .hidden{display:none}
+#loginBox{display:flex;align-items:center;justify-content:center;min-height:70vh;}
+/* Melhorias visuais para as tabelas */
+.table thead th {
+  position: sticky;
+  top: 0;
+  background: #f8f9fa;
+  z-index: 2;
+}
+.table tbody tr:nth-child(even) {
+  background-color: #f6f6f6;
+}
+.table-bordered {
+  border-radius: 8px;
+  overflow: hidden;
+}
+.table td, .table th {
+  vertical-align: middle;
+  padding: 0.5rem 0.75rem;
+}
+.table input.form-control {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.95rem;
+  height: 2rem;
+}
+.table-responsive {
+  max-height: 350px;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.table thead {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+.table .btn-danger {
+  font-size: 1rem;
+  padding: 0.2rem 0.6rem;
+}
+</style>
+</head>
+<body>
+
+<div id="loginBox">
+  <div class="card p-5 text-center" style="max-width:500px">
+      <img src="logo.png" class="img-fluid mb-3" style="max-width:200px" alt="Drakkar Logo">
+    <h5 class="mb-3" data-translate="Login">Login</h5>
+    <div class="mb-3">
+      <label class="form-label" for="adminPass" data-translate="Password">Password</label>
+      <input type="password" class="form-control" id="adminPass" autofocus/>
+    </div>
+    <button class="btn btn-primary" onclick="login()" data-translate="Enter">Enter</button>
+  </div>
+</div>
+
+<div id="adminContent" class="hidden">
+  <ul class="nav nav-tabs mb-3" id="configTabs" role="tablist">
+    <li class="nav-item" role="presentation"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#enginesTab" type="button" role="tab" data-translate="Engine Packages">Engine Packages</button></li>
+    <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#hullTab" type="button" role="tab" data-translate="Hull Colors">Hull Colors</button></li>
+    <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#optionsTab" type="button" role="tab" data-translate="Additional Options">Additional Options</button></li>
+    <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#dealerTab" type="button" role="tab" data-translate="Dealers">Dealers</button></li>
+    <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#boatModelsTab" type="button" role="tab" data-translate="Boat Models">Boat Models</button></li>
+    <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#ordersTab" type="button" role="tab" data-translate="Track Orders">Track Orders</button></li>
+    <li class="nav-item" role="presentation"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#serviceTab" type="button" role="tab" data-translate="After Sales">After Sales</button></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane fade show active" id="enginesTab" role="tabpanel">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="engineTable">
+          <thead class="table-light"><tr><th data-translate="Name (EN)">Name (EN)</th><th data-translate="Name (PT)">Name (PT)</th><th>USD</th><th>BRL</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="addRow('engineTable')" data-translate="Add Row">Add Row</button>
+    </div>
+    <div class="tab-pane fade" id="hullTab" role="tabpanel">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="hullTable">
+          <thead class="table-light"><tr><th data-translate="Name (EN)">Name (EN)</th><th data-translate="Name (PT)">Name (PT)</th><th>USD</th><th>BRL</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="addRow('hullTable')" data-translate="Add Row">Add Row</button>
+    </div>
+    <div class="tab-pane fade" id="optionsTab" role="tabpanel">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="optTable">
+          <thead class="table-light"><tr><th data-translate="Name (EN)">Name (EN)</th><th data-translate="Name (PT)">Name (PT)</th><th>USD</th><th>BRL</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="addRow('optTable')" data-translate="Add Row">Add Row</button>
+    </div>
+    <div class="tab-pane fade" id="boatModelsTab" role="tabpanel">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="modelTable">
+          <thead class="table-light"><tr><th data-translate="Name (EN)">Name (EN)</th><th data-translate="Name (PT)">Name (PT)</th><th>USD</th><th>BRL</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="addRow('modelTable')" data-translate="Add Row">Add Row</button>
+    </div>
+    <div class="tab-pane fade" id="ordersTab" role="tabpanel">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="adminOrdersTable">
+          <thead class="table-light"><tr><th data-translate="Order ID">Order ID</th><th data-translate="Dealer">Dealer</th><th data-translate="Customer">Customer</th><th data-translate="Model">Model</th><th data-translate="Date">Date</th><th data-translate="Status">Status</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="serviceTab" role="tabpanel">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="adminServiceTable">
+          <thead class='table-light'><tr><th data-translate="ID">ID</th><th data-translate="Dealer">Dealer</th><th data-translate="Customer">Customer</th><th data-translate="Model">Model</th><th data-translate="Type">Type</th><th data-translate="Date">Date</th><th data-translate="Status">Status</th><th data-translate="Note">Note</th><th data-translate="Details">Details</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="dealerTab" role="tabpanel">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dealerTable">
+          <thead class="table-light"><tr><th data-translate="Name">Name</th><th data-translate="Email">Email</th><th data-translate="Password">Password</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="addRow('dealerTable')" data-translate="Add Row">Add Row</button>
+    </div>
+  </div>
+  <button class="btn btn-success mt-3" onclick="saveAll()" data-translate="Save All">Save All</button>
+  <button class="btn btn-outline-danger mt-3 ms-2" onclick="resetDefaults()" data-translate="Reset to default">Reset to default</button>
+  <button class="btn btn-outline-primary mt-3 ms-2" data-bs-toggle="modal" data-bs-target="#changePassModal" data-translate="Change Password">Change Password</button>
+
+<div class="modal fade" id="confirmResetModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" data-translate="Are you sure?">Você tem certeza disso?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" data-translate="This action will restore all lists to default values.">
+        Esta ação irá restaurar todas as listas para os valores padrão.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="No">Não</button>
+        <button type="button" class="btn btn-danger" id="confirmResetYes" data-translate="Yes">Sim</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="saveMsg" class="text-success mt-2"></div>
+
+<div class="modal fade" id="changePassModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" data-translate="Change Password">Change Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label" for="oldPass" data-translate="Current Password">Current Password</label>
+          <input type="password" class="form-control" id="oldPass">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="newPass" data-translate="New Password">New Password</label>
+          <input type="password" class="form-control" id="newPass">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="confirmPass" data-translate="Confirm Password">Confirm Password</label>
+          <input type="password" class="form-control" id="confirmPass">
+        </div>
+        <div id="passMsg" class="small"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="Cancel">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="changePassword()" data-translate="Save">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function changePassword(){
+  const stored = localStorage.getItem('adminPassword') || 'drakkar';
+  const oldP = document.getElementById('oldPass').value.trim();
+  const newP = document.getElementById('newPass').value.trim();
+  const confP = document.getElementById('confirmPass').value.trim();
+  const msg = document.getElementById('passMsg');
+  msg.classList.remove('text-danger','text-success');
+  if(oldP!==stored){msg.classList.add('text-danger');msg.textContent=translations[lang]['Incorrect current password'];return;}
+  if(newP.length<4){msg.classList.add('text-danger');msg.textContent=translations[lang]['New password too short'];return;}
+  if(newP!==confP){msg.classList.add('text-danger');msg.textContent=translations[lang]['Passwords do not match'];return;}
+  localStorage.setItem('adminPassword',newP);
+  msg.classList.add('text-success');msg.textContent=translations[lang]['Password changed successfully'];
+  setTimeout(()=>location.reload(),800);
+}
+
+function login(){
+  const pass=document.getElementById('adminPass').value.trim();
+  if(pass==='drakkar'){
+    document.getElementById('loginBox').style.display='none';
+    const admin=document.getElementById('adminContent');
+    admin.classList.remove('hidden');
+    loadTables(); // Load tables after successful login
+    applyTranslations(); // Apply translations after content is visible
+  }else{
+    alert(translations[lang]['Invalid password']);
+    document.getElementById('adminPass').focus();
+  }
+}
+
+// Ativa navegação manual das abas caso Bootstrap não funcione
+function setupTabs() {
+  document.querySelectorAll('#configTabs button').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const target = this.dataset.bsTarget;
+      document.querySelectorAll('#configTabs button').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('show', 'active'));
+      document.querySelector(target).classList.add('show', 'active');
+    });
+  });
+}
+
+// Dados padrão
+const defaultData = {
+  enginePackages: [
+    {name:'TWIN 300 HP VERADO + W/AP/JOY', name_pt:'MOTOR DUPLO 300 HP VERADO + C/AP/JOY', usd:52904.13, brl:52904.13},
+    {name:'TWIN 300 HP VERADO', name_pt:'MOTOR DUPLO 300 HP VERADO', usd:50806, brl:50806},
+    {name:'TWIN 300 HP DTS', name_pt:'MOTOR DUPLO 300 HP DTS', usd:46858.30, brl:46858.30},
+    {name:'TWIN 250 HP DTS', name_pt:'MOTOR DUPLO 250 HP DTS', usd:46073.13, brl:46073.13},
+    {name:'TWIN 200 HP DTS', name_pt:'MOTOR DUPLO 200 HP DTS', usd:44360, brl:44360},
+    {name:'SINGLE 300 HP DTS', name_pt:'MOTOR SIMPLES 300 HP DTS', usd:24245.34, brl:24245.34}
+  ],
+  hullColors: [
+    {name:'White (Solid) – STANDARD', name_pt:'Branco (Sólido) – PADRÃO', usd:0, brl:0},
+    {name:'Sky Blue (Solid)', name_pt:'Azul Céu (Sólido)', usd:1460, brl:1460},
+    {name:'Navy Blue (Solid)', name_pt:'Azul Marinho (Sólido)', usd:1460, brl:1460},
+    {name:'Acqua Green (Solid)', name_pt:'Verde Água (Sólido)', usd:1460, brl:1460},
+    {name:'White (Tone) – STANDARD', name_pt:'Branco (Tom) – PADRÃO', usd:0, brl:0},
+    {name:'Sky Blue (Tone)', name_pt:'Azul Céu (Tom)', usd:990, brl:990},
+    {name:'Navy Blue (Tone)', name_pt:'Azul Marinho (Tom)', usd:990, brl:990},
+    {name:'Acqua Green (Tone)', name_pt:'Verde Água (Tom)', usd:990, brl:990}
+  ],
+  additionalOptions: [
+    {name:'Simrad Premium Pkg Single Display 12 + Hull Transducer 600w', name_pt:'Pacote Simrad Premium Display Único 12" + Transdutor de Casco 600w', usd:4960, brl:4960},
+    {name:'Simrad Premium Display 12 (2nd screen)', name_pt:'Display Simrad Premium 12" (2ª tela)', usd:3108, brl:3100},
+    {name:'In-Hull Transducer 600w', name_pt:'Transdutor de Casco Interno 600w', usd:1618, brl:1618},
+    {name:'Bow Table', name_pt:'Mesa de Proa', usd:458, brl:458},
+    {name:'Diving Door', name_pt:'Porta de Mergulho', usd:880, brl:880},
+    {name:'Windlass Deluxe, Chain, S/S Anchor', name_pt:'Guincho Elétrico Deluxe, Corrente, Âncora Inox', usd:1490, brl:0},
+    {name:'On-board Battery Charger 15a 3 Bank', name_pt:'Carregador de Bateria On-board 15a 3 Bancos', usd:490, brl:490},
+    {name:'Underwater Lights, Blue (Set of 2)', name_pt:'Luzes Subaquáticas, Azuis (Conjunto de 2)', usd:1125, brl:1125},
+    {name:'Protective Cover', name_pt:'Capa de Proteção', usd:840, brl:790},
+    {name:'Outriggers Gemlux 15', name_pt:'Outriggers Gemlux 15"', usd:1618, brl:1618},
+    {name:'Vessel View 4', name_pt:'Vessel View 4"', usd:1140, brl:1140},
+    {name:'SeaDeck', name_pt:'SeaDeck', usd:960, brl:960},
+    {name:'Trailer With Dual Wheels and Brake', name_pt:'Carreta com Rodas Duplas e Freio', usd:7900, brl:9000},
+    {name:'F.O.B.', name_pt:'F.O.B.', usd:960, brl:960}
+  ],
+  dealers: [],
+  boatModels: [
+    {name:'Drakkar 240 CC', name_pt:'Drakkar 240 CC', usd:0, brl:0},
+    {name:'Drakkar 280 CC', name_pt:'Drakkar 280 CC', usd:0, brl:0}
+  ]
+};
+
+function addRow(tableId, name='', name_pt='', usd='', brl='', email='', password='') {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  const tr = document.createElement('tr');
+  if (tableId === 'dealerTable') {
+    tr.innerHTML = `<td><input type='text' class='form-control' value="${name}"></td><td><input type='email' class='form-control' value="${email}"></td><td><input type='password' class='form-control' value="${password}"></td><td><button class='btn btn-sm btn-danger' onclick='this.closest("tr").remove()'>&times;</button></td>`;
+  } else if (tableId === 'engineTable' || tableId === 'hullTable' || tableId === 'optTable' || tableId === 'modelTable') {
+    tr.innerHTML = `<td><input type='text' class='form-control' value="${name}"></td><td><input type='text' class='form-control' value="${name_pt}"></td><td><input type='number' step='0.01' class='form-control' value="${usd}"></td><td><input type='number' step='0.01' class='form-control' value="${brl}"></td><td><button class='btn btn-sm btn-danger' onclick='this.closest("tr").remove()'>&times;</button></td>`;
+  }
+  tbody.appendChild(tr);
+}
+
+function saveAllAndSync() {
+  // Mapeia as tabelas para as chaves de armazenamento
+  const maps = [
+    ['engineTable', 'enginePackages'],
+    ['hullTable', 'hullColors'],
+    ['optTable', 'additionalOptions'],
+    ['modelTable', 'boatModels'],
+    ['dealerTable', 'dealers']
+  ];
+  
+  // Para cada tabela, converte para array e salva com sincronização
+  maps.forEach(([tblId, key]) => {
+    const data = tableToArray(tblId);
+    // Salva os dados no localStorage com um timestamp para controle de versão
+    const timestamp = new Date().getTime();
+    const syncObject = {
+      data: data,
+      timestamp: timestamp,
+      source: 'administrator' // identifica a origem da atualização
+    };
+    
+    localStorage.setItem(key, JSON.stringify(data)); // Mantém compatibilidade com código existente
+    localStorage.setItem(`${key}_sync`, JSON.stringify(syncObject)); // Adiciona metadados de sincronização
+    
+    console.log(`Dados sincronizados: ${key} às ${new Date(timestamp).toLocaleTimeString()}`);
+  });
+}
+
+function saveAll() {
+  saveAllAndSync();
+  document.getElementById('saveMsg').textContent = translations[lang]['Changes saved successfully.'];
+  setTimeout(() => document.getElementById('saveMsg').textContent = '', 3000);
+}
+
+function loadTables() {
+  const maps = [
+    ['engineTable', 'enginePackages'],
+    ['hullTable', 'hullColors'],
+    ['optTable', 'additionalOptions'],
+    ['modelTable', 'boatModels'],
+    ['dealerTable', 'dealers']
+  ];
+  maps.forEach(([tbl, key]) => {
+    const tbody = document.querySelector(`#${tbl} tbody`);
+    if (tbody) tbody.innerHTML = ''; // Clear existing rows before loading
+    let data = JSON.parse(localStorage.getItem(key) || '[]');
+    if (!data.length && defaultData[key]) { data = defaultData[key]; }
+    data.forEach(item => {
+      if (tbl === 'dealerTable') {
+        addRow(tbl, item.name, '', '', '', item.email, item.password);
+      } else {
+        addRow(tbl, item.name, item.name_pt || '', item.usd, item.brl);
+      }
+    });
+  });
+
+  // Load and display orders
+  const adminOrdersTableBody = document.getElementById('adminOrdersTable').querySelector('tbody');
+  if (adminOrdersTableBody) {
+    adminOrdersTableBody.innerHTML = '';
+    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    if (orders.length > 0) {
+      orders.forEach(order => {
+        const row = adminOrdersTableBody.insertRow();
+        row.innerHTML = `
+          <td>${order.orderId}</td>
+          <td>${order.dealer}</td>
+          <td>${order.customer.name}</td>
+          <td>${order.model}</td>
+          <td>${order.date}</td>
+          <td><span class="status-badge status-${order.status.toLowerCase()}">${translations[lang][order.status] || order.status}</span></td>
+          <td><button class="btn btn-sm btn-info view-order-details" data-id="${order.orderId}">View</button></td>
+        `;
+      });
+    } else {
+      adminOrdersTableBody.innerHTML = `<tr><td colspan="7" class="text-center" data-translate="No orders yet">No orders yet</td></tr>`;
+    }
+  }
+
+  // Load and display service requests
+  const adminServiceTableBody = document.getElementById('adminServiceTable').querySelector('tbody');
+  if (adminServiceTableBody) {
+    adminServiceTableBody.innerHTML = '';
+    const serviceRequests = JSON.parse(localStorage.getItem('serviceRequests') || '[]');
+    if (serviceRequests.length > 0) {
+      serviceRequests.forEach(request => {
+        const row = adminServiceTableBody.insertRow();
+        row.innerHTML = `
+          <td>${request.id}</td>
+          <td>${request.dealer}</td>
+          <td>${request.customer}</td>
+          <td>${request.model}</td>
+          <td>${request.type}</td>
+          <td>${request.date}</td>
+          <td><span class="status-badge status-${request.status.toLowerCase().replace(/\s/g, '-') || 'open'}">${translations[lang][request.status] || request.status}</span></td>
+          <td>${request.issues.join('; ')}</td>
+          <td><button class="btn btn-sm btn-info view-service-details" data-id="${request.id}">View</button></td>
+          <td><button class="btn btn-sm btn-danger delete-service-request" data-id="${request.id}">&times;</button></td>
+        `;
+      });
+    } else {
+      adminServiceTableBody.innerHTML = `<tr><td colspan="10" class="text-center" data-translate="No service requests yet">No service requests yet</td></tr>`;
+    }
+  }
+
+  // Event listeners for view details buttons (Orders)
+  document.querySelectorAll('.view-order-details').forEach(button => {
+    button.addEventListener('click', function() {
+      const orderId = this.dataset.id;
+      const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+      const order = orders.find(o => o.orderId === orderId);
+      if (order) {
+        showOrderDetails(order);
+      }
+    });
+  });
+
+  // Event listeners for view details buttons (Service)
+  document.querySelectorAll('.view-service-details').forEach(button => {
+    button.addEventListener('click', function() {
+      const requestId = this.dataset.id;
+      const serviceRequests = JSON.parse(localStorage.getItem('serviceRequests') || '[]');
+      const request = serviceRequests.find(r => r.id === requestId);
+      if (request) {
+        showServiceRequestDetails(request);
+      }
+    });
+  });
+
+  // Event listeners for delete service request buttons
+  document.querySelectorAll('.delete-service-request').forEach(button => {
+    button.addEventListener('click', function() {
+      const requestId = this.dataset.id;
+      deleteServiceRequest(requestId);
+    });
+  });
+
+  // Reapply translations after tables are loaded
+  applyTranslations();
+}
+
+function tableToArray(tblId) {
+  return Array.from(document.querySelectorAll(`#${tblId} tbody tr`)).map(tr => {
+    const tds = tr.querySelectorAll('td input');
+    if (tblId === 'dealerTable') {
+      return { name: tds[0].value, email: tds[1].value, password: tds[2].value };
+    }
+    if (tblId === 'engineTable' || tblId === 'hullTable' || tblId === 'optTable' || tblId === 'modelTable') {
+        // Find corresponding default data to get the original English name if the current name_pt is empty
+        const originalName = tds[0].value;
+        let name_pt_value = tds[1].value;
+
+        if (!name_pt_value) {
+            const defaultItem = defaultData[tblId.replace('Table', '')].find(item => item.name === originalName);
+            if (defaultItem) {
+                name_pt_value = defaultItem.name_pt;
+            }
+        }
+
+      return { name: originalName, name_pt: name_pt_value, usd: parseFloat(tds[2].value), brl: parseFloat(tds[3].value) };
+    }
+    return { name: tds[0].value, usd: parseFloat(tds[1].value), brl: parseFloat(tds[2].value) };
+  }).filter(i => i.name);
+}
+
+function saveAll() {
+  localStorage.setItem('enginePackages', JSON.stringify(tableToArray('engineTable')));
+  localStorage.setItem('hullColors', JSON.stringify(tableToArray('hullTable')));
+  localStorage.setItem('additionalOptions', JSON.stringify(tableToArray('optTable')));
+  localStorage.setItem('boatModels', JSON.stringify(tableToArray('modelTable')));
+  localStorage.setItem('dealers', JSON.stringify(tableToArray('dealerTable')));
+  document.getElementById('saveMsg').textContent = translations[lang]['Saved! Reload dealer page to see changes.'];
+  setTimeout(() => document.getElementById('saveMsg').textContent = '', 3000);
+}
+
+function performReset() {
+  ['enginePackages', 'hullColors', 'additionalOptions', 'boatModels', 'dealers', 'orders', 'serviceRequests'].forEach(k => localStorage.removeItem(k));
+  ['engineTable', 'hullTable', 'optTable', 'modelTable', 'dealerTable', 'adminOrdersTable', 'adminServiceTable'].forEach(id => {
+    const tb = document.querySelector(`#${id} tbody`);
+    if (tb) tb.innerHTML = '';
+  });
+  loadTables();
+  document.getElementById('saveMsg').textContent = translations[lang]['Defaults reloaded (not yet saved).'];
+  const m = bootstrap.Modal.getInstance(document.getElementById('confirmResetModal'));
+  if (m) m.hide();
+  applyTranslations(); // Reapply translations after reset
+}
+
+function resetDefaults() {
+  const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('confirmResetModal'));
+  modal.show();
+  document.getElementById('confirmResetYes').onclick = performReset;
+  document.getElementById('confirmResetModal').addEventListener('shown.bs.modal', function () {
+    document.getElementById('confirmResetYes').focus();
+  });
+}
+
+// Function to show order details (re-used from track-orders.html)
+function showOrderDetails(order){
+    const clean=text=>text?text.toString().replace(/\s*\|.*$/,'').trim():'';
+    order.engine=clean(order.engine);
+    order.hull_color=clean(order.hull_color);
+    order.model=clean(order.model);
+    let totalUsd=order.totalUsd||0;
+    if(!totalUsd && order.total){
+        const m=order.total.match(/[\d,.]+/);
+        if(m){ totalUsd=parseFloat(m[0].replace(/,/g,'')); }
+    }
+    const body=document.getElementById('modalBody'); // Assuming a modal body with this ID exists in admin.html for order details
+    body.innerHTML=`
+    <div class="text-center mb-2"><img src="logo.png" alt="Drakkar Boats" style="max-width:140px"></div>
+    <p><strong>${translations[lang]['Order ID']}:</strong> ${order.orderId}</p>
+    <p><strong>${translations[lang]['Date']}:</strong> ${order.date}</p>
+    <p><strong>${translations[lang]['Status']}:</strong> ${translations[lang][order.status] || order.status}</p>
+    <hr>
+    <p><strong>${translations[lang]['Customer']}:</strong> ${order.customer.name}</p>
+    <p><strong>${translations[lang]['Email']}:</strong> ${order.customer.email}</p>
+    <p><strong>${translations[lang]['Phone']}:</strong> ${order.customer.phone}</p>
+    <p><strong>${translations[lang]['Model']}:</strong> ${order.model}</p>
+    <p><strong>${translations[lang]['Engine']}:</strong> ${order.engine}</p>
+    <p><strong>${translations[lang]['Hull Color']}:</strong> ${order.hull_color}</p>
+    <p><strong>${translations[lang]['Options']}:</strong> ${order.options && order.options.length ? order.options.join(', ') : translations[lang]['None']}</p>
+    <p><strong>${translations[lang]['Total']}:</strong> $${Number(totalUsd||0).toLocaleString('en-US')}</p>`;
+    
+    const orderDetailsModal = new bootstrap.Modal(document.getElementById('orderModal'));
+    orderDetailsModal.show();
+}
+
+// Function to show service request details (re-used from after-sales.html)
+function showServiceRequestDetails(request){
+    const body=document.getElementById('modalBodyService'); // Assuming a modal body with this ID exists in admin.html for service details
+    if (!body) {
+        // Create modal structure if it doesn't exist
+        const modalHtml = `
+            <div class="modal fade" id="serviceRequestModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" data-translate="Service Request Details">Service Request Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="modalBodyService">
+                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="Close">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        // Re-get the body element after it's created
+        body = document.getElementById('modalBodyService');
+    }
+
+    body.innerHTML=`
+    <div class="text-center mb-2"><img src="logo.png" alt="Drakkar Boats" style="max-width:140px"></div>
+    <p><strong>${translations[lang]['ID']}:</strong> ${request.id}</p>
+    <p><strong>${translations[lang]['Date']}:</strong> ${request.date}</p>
+    <p><strong>${translations[lang]['Status']}:</strong> ${translations[lang][request.status] || request.status}</p>
+    <hr>
+    <p><strong>${translations[lang]['Customer']}:</strong> ${request.customer}</p>
+    <p><strong>${translations[lang]['Model']}:</strong> ${request.model}</p>
+    <p><strong>${translations[lang]['Request Type']}:</strong> ${request.type}</p>
+    <p><strong>${translations[lang]['Issues']}:</strong></p>
+    <ul>${request.issues.map(i=>`<li>${i}</li>`).join('')}</ul>`;
+    
+    const serviceRequestModal = new bootstrap.Modal(document.getElementById('serviceRequestModal'));
+    serviceRequestModal.show();
+}
+
+function deleteServiceRequest(id) {
+  if (deleteServiceRequestAndSync(id)) {
+    loadTables(); // Reload tables after deletion
+  }
+}
+
+// Translation script
+const translations = {
+    pt: {
+        'Login': 'Login',
+        'Password': 'Senha',
+        'Enter': 'Entrar',
+        'Invalid password': 'Senha inválida',
+        'Engine Packages': 'Pacotes de Motor',
+        'Hull Colors': 'Cores de Casco',
+        'Additional Options': 'Opcionais Adicionais',
+        'Dealers': 'Concessionárias',
+        'Boat Models': 'Modelos de Barco',
+        'Track Orders': 'Acompanhar Pedidos',
+        'After Sales': 'Pós-Venda',
+        'Name (EN)': 'Nome (EN)',
+        'Name (PT)': 'Nome (PT)',
+        'Add Row': 'Adicionar Linha',
+        'Order ID': 'ID do Pedido',
+        'Dealer': 'Concessionária',
+        'Customer': 'Cliente',
+        'Model': 'Modelo',
+        'Date': 'Data',
+        'Status': 'Status',
+        'ID': 'ID',
+        'Type': 'Tipo',
+        'Note': 'Nota',
+        'Details': 'Detalhes',
+        'Name': 'Nome',
+        'Email': 'Email',
+        'Save All': 'Salvar Tudo',
+        'Reset to default': 'Redefinir para padrão',
+        'Change Password': 'Mudar Senha',
+        'Are you sure?': 'Você tem certeza?',
+        'This action will restore all lists to default values.': 'Esta ação irá restaurar todas as listas para os valores padrão.',
+        'No': 'Não',
+        'Yes': 'Sim',
+        'Current Password': 'Senha Atual',
+        'New Password': 'Nova Senha',
+        'Confirm Password': 'Confirmar Senha',
+        'Cancel': 'Cancelar',
+        'Save': 'Salvar',
+        'Incorrect current password': 'Senha atual incorreta',
+        'New password too short': 'Nova senha muito curta',
+        'Passwords do not match': 'Senhas não conferem',
+        'Password changed successfully': 'Senha alterada com sucesso',
+        'Saved! Reload dealer page to see changes.': 'Salvo! Recarregue a página do revendedor para ver as alterações.',
+        'Defaults reloaded (not yet saved).': 'Padrões recarregados (ainda não salvos).',
+        'No orders yet': 'Nenhum pedido ainda',
+        'No service requests yet': 'Nenhuma solicitação de serviço ainda',
+        'Pending': 'Pendente',
+        'Production': 'Em Produção',
+        'Shipping': 'Em Envio',
+        'Delivered': 'Entregue',
+        'Open': 'Aberto',
+        'In Progress': 'Em Andamento',
+        'Resolved': 'Resolvido',
+        'Closed': 'Fechado',
+        'None': 'Nenhum',
+        'Phone': 'Telefone',
+        'Request Type': 'Tipo de Solicitação',
+        'Issues': 'Problemas',
+        'Service Request Details': 'Detalhes da Solicitação de Serviço',
+        'Are you sure you want to delete this service request?': 'Tem certeza de que deseja excluir esta solicitação de serviço?',
+        'Service request deleted successfully.': 'Solicitação de serviço excluída com sucesso.',
+    },
+    en: {
+        'Login': 'Login',
+        'Password': 'Password',
+        'Enter': 'Enter',
+        'Invalid password': 'Invalid password',
+        'Engine Packages': 'Engine Packages',
+        'Hull Colors': 'Hull Colors',
+        'Additional Options': 'Additional Options',
+        'Dealers': 'Dealers',
+        'Boat Models': 'Boat Models',
+        'Track Orders': 'Track Orders',
+        'After Sales': 'After Sales',
+        'Name (EN)': 'Name (EN)',
+        'Name (PT)': 'Name (PT)',
+        'Add Row': 'Add Row',
+        'Order ID': 'Order ID',
+        'Dealer': 'Dealer',
+        'Customer': 'Customer',
+        'Model': 'Model',
+        'Date': 'Date',
+        'Status': 'Status',
+        'ID': 'ID',
+        'Type': 'Type',
+        'Note': 'Note',
+        'Details': 'Details',
+        'Name': 'Name',
+        'Email': 'Email',
+        'Save All': 'Save All',
+        'Reset to default': 'Reset to default',
+        'Change Password': 'Change Password',
+        'Are you sure?': 'Are you sure?',
+        'This action will restore all lists to default values.': 'This action will restore all lists to default values.',
+        'No': 'No',
+        'Yes': 'Yes',
+        'Current Password': 'Current Password',
+        'New Password': 'New Password',
+        'Confirm Password': 'Confirm Password',
+        'Cancel': 'Cancel',
+        'Save': 'Save',
+        'Incorrect current password': 'Incorrect current password',
+        'New password too short': 'New password too short',
+        'Passwords do not match': 'Passwords do not match',
+        'Password changed successfully': 'Password changed successfully',
+        'Saved! Reload dealer page to see changes.': 'Saved! Reload dealer page to see changes.',
+        'Defaults reloaded (not yet saved).': 'Defaults reloaded (not yet saved).',
+        'No orders yet': 'No orders yet',
+        'No service requests yet': 'No service requests yet',
+        'Pending': 'Pending',
+        'Production': 'In Production',
+        'Shipping': 'Shipping',
+        'Delivered': 'Delivered',
+        'Open': 'Open',
+        'In Progress': 'In Progress',
+        'Resolved': 'Resolved',
+        'Closed': 'Closed',
+        'None': 'None',
+        'Phone': 'Phone',
+        'Request Type': 'Request Type',
+        'Issues': 'Issues',
+        'Service Request Details': 'Service Request Details',
+        'Are you sure you want to delete this service request?': 'Are you sure you want to delete this service request?',
+        'Service request deleted successfully.': 'Service request deleted successfully.',
+    },
+    es: {
+        'Login': 'Acceder',
+        'Password': 'Contraseña',
+        'Enter': 'Entrar',
+        'Invalid password': 'Contraseña inválida',
+        'Engine Packages': 'Paquetes de Motor',
+        'Hull Colors': 'Colores de Casco',
+        'Additional Options': 'Opciones Adicionales',
+        'Dealers': 'Concesionarios',
+        'Boat Models': 'Modelos de Barcos',
+        'Track Orders': 'Rastrear Pedidos',
+        'After Sales': 'Postventa',
+        'Name (EN)': 'Nombre (EN)',
+        'Name (PT)': 'Nombre (PT)',
+        'Add Row': 'Agregar Fila',
+        'Order ID': 'ID de Pedido',
+        'Dealer': 'Concesionario',
+        'Customer': 'Cliente',
+        'Model': 'Modelo',
+        'Date': 'Fecha',
+        'Status': 'Estado',
+        'ID': 'ID',
+        'Type': 'Tipo',
+        'Note': 'Nota',
+        'Details': 'Detalles',
+        'Name': 'Nombre',
+        'Email': 'Correo Electrónico',
+        'Save All': 'Guardar Todo',
+        'Reset to default': 'Restablecer a valores predeterminados',
+        'Change Password': 'Cambiar Contraseña',
+        'Are you sure?': '¿Está seguro?',
+        'This action will restore all lists to default values.': 'Esta acción restaurará todas las listas a los valores predeterminados.',
+        'No': 'No',
+        'Yes': 'Sí',
+        'Current Password': 'Contraseña Actual',
+        'New Password': 'Nueva Contraseña',
+        'Confirm Password': 'Confirmar Contraseña',
+        'Cancel': 'Cancelar',
+        'Save': 'Guardar',
+        'Incorrect current password': 'Contraseña actual incorrecta',
+        'New password too short': 'Nueva contraseña muy corta',
+        'Passwords do not match': 'Las contraseñas no coinciden',
+        'Password changed successfully': 'Contraseña cambiada con éxito',
+        'Saved! Reload dealer page to see changes.': '¡Guardado! Recargue la página del distribuidor para ver los cambios.',
+        'Defaults reloaded (not yet saved).': 'Valores predeterminados recargados (aún no guardados).',
+        'No orders yet': 'No hay pedidos aún',
+        'No service requests yet': 'No hay solicitudes de servicio aún',
+        'Pending': 'Pendiente',
+        'Production': 'En Producción',
+        'Shipping': 'En Envío',
+        'Delivered': 'Entregado',
+        'Open': 'Abierto',
+        'In Progress': 'En Progreso',
+        'Resolved': 'Resuelto',
+        'Closed': 'Cerrado',
+        'None': 'Ninguno',
+        'Phone': 'Teléfono',
+        'Request Type': 'Tipo de Solicitud',
+        'Issues': 'Problemas',
+        'Service Request Details': 'Detalles de la Solicitud de Servicio',
+        'Are you sure you want to delete this service request?': '¿Está seguro de que desea eliminar esta solicitud de servicio?',
+        'Service request deleted successfully.': 'Solicitud de servicio eliminada con éxito.',
+    }
+};
+
+let lang = localStorage.getItem('selectedLang') || 'en'; // Default to English if no language is set
+
+function applyTranslations() {
+    document.querySelectorAll('[data-translate]').forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+            element.textContent = translations[lang][key];
+        }
+    });
+
+    // Translate placeholder texts for inputs if applicable
+    const adminPassInput = document.getElementById('adminPass');
+    if (adminPassInput && translations[lang]['Password']) {
+        adminPassInput.placeholder = translations[lang]['Password'];
+    }
+
+    // Translate table headers that are dynamically loaded or not caught by data-translate
+    const tableHeaders = {
+        'adminOrdersTable': {
+            'Order ID': 'Order ID', 'Dealer': 'Dealer', 'Customer': 'Customer',
+            'Model': 'Model', 'Date': 'Date', 'Status': 'Status'
+        },
+        'adminServiceTable': {
+            'ID': 'ID', 'Dealer': 'Dealer', 'Customer': 'Customer',
+            'Model': 'Model', 'Type': 'Type', 'Date': 'Date', 'Status': 'Status',
+            'Note': 'Note', 'Details': 'Details'
+        }
+    };
+
+    for (const tableId in tableHeaders) {
+        const headerRow = document.querySelector(`#${tableId} thead tr`);
+        if (headerRow) {
+            headerRow.querySelectorAll('th').forEach(th => {
+                const originalText = th.getAttribute('data-translate') || th.textContent.trim();
+                if (translations[lang][originalText]) {
+                    th.textContent = translations[lang][originalText];
+                }
+            });
+        }
+    }
+
+    // Update status badges if they are already rendered
+    document.querySelectorAll('.status-badge').forEach(badge => {
+        const statusText = badge.textContent.trim();
+        if (translations[lang][statusText]) {
+            badge.textContent = translations[lang][statusText];
+        }
+    });
+}
+
+// Executa ao carregar a página
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    setupTabs();
+    applyTranslations(); // Apply translations on initial load
+  });
+} else {
+  setupTabs();
+  applyTranslations(); // Apply translations on initial load
+}
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" integrity="sha512-uV8bgZt+xO2Tx5cDIeEJD7BqXc9E+u6KDAdAm8YGtS+wGGyRyvE4s46HoPazTA/gkGEXLJJLLfi5yRvD/4hqgA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<div class="modal fade" id="orderModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" data-translate="Order Details">Order Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="Close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="serviceRequestModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" data-translate="Service Request Details">Service Request Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalBodyService">
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-translate="Close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script de sincronização entre painéis -->
+<script src="js/sync-data.js"></script>
+</body>
+</html>

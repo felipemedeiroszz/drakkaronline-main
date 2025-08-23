@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Dealer Login | Drakkar Boats</title>
+         <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href="../../wp-content/themes/drakkarboats/css/style.css@ver=2021090201.css">
+        <style>
+            .dealer-login-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 60vh;
+                padding: 40px 20px;
+            }
+            .dealer-login-form {
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+                padding: 40px;
+                width: 100%;
+                max-width: 500px;
+            }
+            .dealer-login-form h1 {
+                color: #255189;
+                text-align: center;
+                margin-bottom: 30px;
+                font-size: 2rem;
+            }
+            .dealer-login-form input[type="text"],
+            .dealer-login-form input[type="password"] {
+                width: 100%;
+                padding: 12px 15px;
+                margin-bottom: 20px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 16px;
+            }
+            .dealer-login-form input[type="submit"] {
+                background-color: #255189;
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                width: 100%;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: 600;
+                transition: background-color 0.3s;
+            }
+            .dealer-login-form input[type="submit"]:hover {
+                background-color: #1a3c6a;
+            }
+            .forgot-password {
+                text-align: center;
+                margin-top: 20px;
+            }
+            .forgot-password a {
+                color: #255189;
+                text-decoration: none;
+            }
+            .forgot-password a:hover {
+                text-decoration: underline;
+            }
+            .dealer-login-header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .dealer-login-header img {
+                max-width: 200px;
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <section id="dealer-login">
+                <div class="dealer-login-container">
+                    <div class="dealer-login-form">
+                        <div class="dealer-login-header">
+                            <img src="logo.png" alt="Drakkar Boats Logo">
+                            <h1>Dealer Login</h1>
+                        </div>
+                        <form action="dashboard.html" method="get" id="login-form">
+                            <div class="form-group">
+                                <label for="username" class="visually-hidden">Username</label>
+                                <input type="text" name="username" id="username" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="visually-hidden">Password</label>
+                                <input type="password" name="password" id="password" placeholder="Password" required>
+                            </div>
+                            <div class="form-submit-container">
+                                <input type="submit" value="Login">
+                            </div>
+                        </form>
+                       
+                        </div>
+                        <div id="login-error" style="color:#c00;text-align:center;display:none;">Usuário ou senha inválidos</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <script>
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            if(!(user === 'admin' && pass === '123')) {
+                e.preventDefault();
+                document.getElementById('login-error').style.display = 'block';
+            }
+        });
+        </script>
+        <script>
+    // Tradução Dealer
+    (function() {
+        const translations = {
+            pt: {
+                'Dealer Login': 'Login do Dealer',
+                'Username': 'Usuário',
+                'Password': 'Senha',
+                'Login': 'Entrar',
+                'Usuário ou senha inválidos': 'Usuário ou senha inválidos',
+                'Forgot your password?': 'Esqueceu sua senha?'
+            },
+            en: {
+                'Dealer Login': 'Dealer Login',
+                'Username': 'Username',
+                'Password': 'Password',
+                'Login': 'Login',
+                'Usuário ou senha inválidos': 'Invalid username or password',
+                'Forgot your password?': 'Forgot your password?'
+            },
+            es: {
+                'Dealer Login': 'Acceso del Distribuidor',
+                'Username': 'Usuario',
+                'Password': 'Contraseña',
+                'Login': 'Entrar',
+                'Usuário ou senha inválidos': 'Usuario o contraseña inválidos',
+                'Forgot your password?': '¿Olvidó su contraseña?'
+            }
+        };
+        const lang = localStorage.getItem('selectedLang') || 'pt';
+        function translateText(selector, original) {
+            const el = document.querySelector(selector);
+            if (el && translations[lang][original]) el.textContent = translations[lang][original];
+        }
+        // Títulos e labels
+        translateText('.dealer-login-header h1', 'Dealer Login');
+        translateText('label[for="username"]', 'Username');
+        translateText('label[for="password"]', 'Password');
+        // Placeholder dos inputs
+        const userInput = document.getElementById('username');
+        if (userInput && translations[lang]['Username']) userInput.placeholder = translations[lang]['Username'];
+        const passInput = document.getElementById('password');
+        if (passInput && translations[lang]['Password']) passInput.placeholder = translations[lang]['Password'];
+        // Botão de login
+        const loginBtn = document.querySelector('input[type="submit"]');
+        if (loginBtn && translations[lang]['Login']) loginBtn.value = translations[lang]['Login'];
+        // Mensagem de erro
+        const errorDiv = document.getElementById('login-error');
+        if (errorDiv && translations[lang]['Usuário ou senha inválidos']) errorDiv.textContent = translations[lang]['Usuário ou senha inválidos'];
+    })();
+    </script>
+    </body>
+</html>

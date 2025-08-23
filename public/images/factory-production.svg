@@ -1,0 +1,54 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Factory building base -->
+  <rect x="10" y="300" width="492" height="202" fill="#3C3C3C" stroke="#2C2C2C" stroke-width="6"/>
+  
+  <!-- Main factory building -->
+  <rect x="150" y="200" width="250" height="120" fill="#C4C4A0" stroke="#2C2C2C" stroke-width="6"/>
+  
+  <!-- Factory dome/roof -->
+  <ellipse cx="75" cy="350" rx="65" ry="50" fill="#C4C4A0" stroke="#2C2C2C" stroke-width="6"/>
+  
+  <!-- Smokestacks -->
+  <rect x="290" y="80" width="30" height="140" fill="#F4B942" stroke="#2C2C2C" stroke-width="6"/>
+  <rect x="400" y="80" width="30" height="140" fill="#F4B942" stroke="#2C2C2C" stroke-width="6"/>
+  
+  <!-- Smokestack tops -->
+  <rect x="285" y="70" width="40" height="20" fill="#2C2C2C"/>
+  <rect x="395" y="70" width="40" height="20" fill="#2C2C2C"/>
+  
+  <!-- Red middle sections of smokestacks -->
+  <rect x="290" y="130" width="30" height="50" fill="#DC2626"/>
+  <rect x="400" y="130" width="30" height="50" fill="#DC2626"/>
+  
+  <!-- Smoke clouds -->
+  <ellipse cx="260" cy="60" rx="40" ry="25" fill="#575757"/>
+  <ellipse cx="240" cy="45" rx="35" ry="20" fill="#575757"/>
+  <ellipse cx="220" cy="30" rx="30" ry="15" fill="#575757"/>
+  <ellipse cx="200" cy="20" rx="25" ry="12" fill="#575757"/>
+  
+  <ellipse cx="370" cy="60" rx="40" ry="25" fill="#575757"/>
+  <ellipse cx="390" cy="45" rx="35" ry="20" fill="#575757"/>
+  <ellipse cx="410" cy="30" rx="30" ry="15" fill="#575757"/>
+  <ellipse cx="430" cy="20" rx="25" ry="12" fill="#575757"/>
+  
+  <!-- Factory windows -->
+  <rect x="185" y="240" width="25" height="25" fill="#2C2C2C"/>
+  <rect x="225" y="240" width="25" height="25" fill="#2C2C2C"/>
+  <rect x="265" y="240" width="25" height="25" fill="#2C2C2C"/>
+  
+  <!-- Main entrance -->
+  <rect x="35" y="360" width="40" height="60" fill="#2C2C2C"/>
+  
+  <!-- Side building window -->
+  <rect x="420" y="320" width="30" height="40" fill="#F4B942"/>
+  
+  <!-- Conveyor belt/pipes -->
+  <ellipse cx="150" cy="330" rx="60" ry="20" fill="#DC2626"/>
+  <ellipse cx="200" cy="335" rx="50" ry="18" fill="#DC2626"/>
+  <ellipse cx="250" cy="340" rx="45" ry="16" fill="#DC2626"/>
+  
+  <!-- Small details/rivets -->
+  <circle cx="50" cy="400" r="3" fill="#2C2C2C"/>
+  <circle cx="70" cy="400" r="3" fill="#2C2C2C"/>
+  <circle cx="90" cy="400" r="3" fill="#2C2C2C"/>
+</svg>
