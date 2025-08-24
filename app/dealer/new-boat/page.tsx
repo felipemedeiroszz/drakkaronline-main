@@ -644,6 +644,13 @@ export default function NewBoatPage() {
         return
       }
 
+      // Definir idioma atual para salvar os textos no idioma correto
+      const isPt = lang === "pt"
+      const boatModel = getSelectedBoatModel()
+      const engine = getSelectedEngine()
+      const hullColor = getSelectedHullColor()
+      const upholstery = getSelectedUpholsteryPackage()
+
       const orderData = {
         order_id: orderId,
         dealer_id: currentDealerId,
@@ -656,11 +663,15 @@ export default function NewBoatPage() {
         customer_state: formData.customer_state,
         customer_zip: formData.customer_zip,
         customer_country: formData.customer_country,
-        boat_model: formData.boat_model,
-        engine_package: formData.engine_package,
-        hull_color: formData.hull_color,
-        upholstery_package: formData.upholstery_package,
-        additional_options: formData.additional_options,
+        // Salvar campos de exibição no idioma selecionado
+        boat_model: (isPt ? boatModel?.name_pt : boatModel?.name) || formData.boat_model,
+        engine_package: (isPt ? engine?.name_pt : engine?.name) || formData.engine_package,
+        hull_color: (isPt ? hullColor?.name_pt : hullColor?.name) || formData.hull_color,
+        upholstery_package: (isPt ? upholstery?.name_pt : upholstery?.name) || formData.upholstery_package,
+        additional_options: formData.additional_options.map((optName) => {
+          const opt = config.additionalOptions.find((o) => o.name === optName)
+          return (isPt ? opt?.name_pt : opt?.name) || optName
+        }),
         payment_method: formData.payment_method,
         deposit_amount: Number.parseFloat(formData.deposit_amount) || 0,
         additional_notes: formData.additional_notes,
