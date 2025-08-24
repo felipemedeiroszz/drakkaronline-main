@@ -6,6 +6,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Download, Copy } from "lucide-react" // Import Download and Copy icons
 import { Button } from "@/components/ui/button" // Import Button component
+import { useBoatModelsSync } from "@/hooks/use-boat-models-sync"
 
 interface MarketingContent {
   id: number
@@ -21,10 +22,13 @@ interface MarketingContent {
 export default function MarketingContentPage() {
   const [content, setContent] = useState<MarketingContent[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [selectedModel, setSelectedModel] = useState("Todos os Modelos")
+  // Use a canonical value for the "all" option to avoid language coupling
+  const MODEL_ALL = "__ALL_MODELS__"
+  const [selectedModel, setSelectedModel] = useState(MODEL_ALL)
   const [lang, setLang] = useState("pt") // Add lang state
   const [copyStatus, setCopyStatus] = useState<{ [key: number]: string }>({}) // State for copy feedback
   const router = useRouter()
+  const { boatModels } = useBoatModelsSync()
 
   useEffect(() => {
     const savedLang = localStorage.getItem("selectedLang") || "pt"
@@ -91,6 +95,18 @@ export default function MarketingContentPage() {
     return item[`${field}_pt`] || item[`${field}_en`]
   }
 
+  // Localize boat model display name based on current language
+  const getLocalizedModelName = (model: string) => {
+    if (!model) return model
+    const found = boatModels.find(
+      (m: any) => m.name === model || m.name_pt === model
+    )
+    if (!found) return model
+    if (lang === "en") return found.name || model
+    // For pt and es, show Portuguese name as fallback dataset does not include es
+    return found.name_pt || found.name || model
+  }
+
   const loadContent = async () => {
     try {
       setIsLoading(true)
@@ -131,9 +147,9 @@ export default function MarketingContentPage() {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        setCopyStatus((prev) => ({ ...prev, [`${id}-${type}`]: t("copied") }))
+        setCopyStatus((prev: Record<string, string>) => ({ ...prev, [`${id}-${type}`]: t("copied") }))
         setTimeout(() => {
-          setCopyStatus((prev) => ({ ...prev, [`${id}-${type}`]: "" }))
+          setCopyStatus((prev: Record<string, string>) => ({ ...prev, [`${id}-${type}`]: "" }))
         }, 2000)
       })
       .catch((err) => {
@@ -141,13 +157,18 @@ export default function MarketingContentPage() {
       })
   }
 
-  const filteredContent = content.filter(
-    (item) =>
-      selectedModel === t("all-models") || item.boat_model === selectedModel || item.boat_model === "All Models",
-  )
+  const filteredContent = content.filter((item: MarketingContent) => {
+    if (selectedModel === MODEL_ALL) return true
+    // Keep a permissive match in case stored content uses localized name
+    return (
+      item.boat_model === selectedModel ||
+      getLocalizedModelName(item.boat_model) === getLocalizedModelName(selectedModel) ||
+      item.boat_model === "All Models"
+    )
+  })
 
-  // Get unique boat models from content
-  const boatModels = Array.from(new Set(content.map((item) => item.boat_model).filter(Boolean)))
+  // Get unique boat model identifiers from content
+  const contentBoatModels = Array.from(new Set(content.map((item) => item.boat_model).filter(Boolean)))
 
   if (isLoading) {
     return (
@@ -197,13 +218,13 @@ export default function MarketingContentPage() {
             <label className="font-medium text-gray-700">{t("filter-by-model")}</label>
             <select
               value={selectedModel}
-              onChange={(e) => setSelectedModel(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedModel(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg bg-white"
             >
-              <option value="Todos os Modelos">{t("all-models")}</option>
-              {boatModels.map((model) => (
+              <option value={MODEL_ALL}>{t("all-models")}</option>
+              {contentBoatModels.map((model) => (
                 <option key={model} value={model}>
-                  {model}
+                  {getLocalizedModelName(model)}
                 </option>
               ))}
             </select>
@@ -217,7 +238,7 @@ export default function MarketingContentPage() {
               <p className="text-gray-500 text-lg">{t("no-content-available")}</p>
             </div>
           ) : (
-            filteredContent.map((item) => (
+            filteredContent.map((item: MarketingContent) => (
               <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="relative h-48">
                   <Image
@@ -237,7 +258,7 @@ export default function MarketingContentPage() {
                     <p className="text-gray-600 mb-4 line-clamp-3">{getTranslatedContent(item, "subtitle")}</p>
                   )}
                   <div className="flex justify-between items-center text-sm text-gray-500">
-                    <span>{item.boat_model}</span>
+                    <span>{getLocalizedModelName(item.boat_model)}</span>
                     <span>{new Date(item.created_at).toLocaleDateString()}</span>
                   </div>
                   <div className="mt-4 flex flex-col gap-2">
