@@ -1109,6 +1109,13 @@ export default function QuoteClientPage() {
         return
       }
 
+      // Definir idioma atual e obter itens selecionados para salvar nomes no idioma correto
+      const isPt = lang === "pt"
+      const selectedBoatModel = getSelectedBoatModel()
+      const selectedEngine = getSelectedEngine()
+      const selectedHullColor = getSelectedHullColor()
+      const selectedUpholstery = getSelectedUpholsteryPackage()
+
       const quoteData = {
         quoteId,
         dealerId, // Include dealer_id for the API
@@ -1123,11 +1130,14 @@ export default function QuoteClientPage() {
           zip: formData.customer_zip,
           country: formData.customer_country,
         },
-        model: formData.boat_model,
-        engine: formData.engine_package,
-        hull_color: formData.hull_color,
-        upholstery_package: formData.upholstery_package,
-        options: formData.additional_options,
+        model: (isPt ? selectedBoatModel?.name_pt : selectedBoatModel?.name) || formData.boat_model,
+        engine: (isPt ? selectedEngine?.name_pt : selectedEngine?.name) || formData.engine_package,
+        hull_color: (isPt ? selectedHullColor?.name_pt : selectedHullColor?.name) || formData.hull_color,
+        upholstery_package: (isPt ? selectedUpholstery?.name_pt : selectedUpholstery?.name) || formData.upholstery_package,
+        options: formData.additional_options.map((optName) => {
+          const opt = config.additionalOptions.find((o) => o.name === optName)
+          return (isPt ? opt?.name_pt : opt?.name) || optName
+        }),
         payment_method: formData.payment_method,
         deposit_amount: Number.parseFloat(formData.deposit_amount) || 0,
         additional_notes: formData.additional_notes,
