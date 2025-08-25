@@ -1395,12 +1395,6 @@ export default function AfterSalesPage() {
                 </span>
               )}
               <button
-                onClick={debugDealerInfo}
-                className="bg-gray-600 text-white px-3 py-2 rounded hover:bg-gray-700 text-sm"
-              >
-                🐛 {translations[lang as keyof typeof translations]["Debug Info"]}
-              </button>
-              <button
                 onClick={forceRefreshFromDatabase}
                 disabled={isLoading}
                 className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800 disabled:opacity-50"
